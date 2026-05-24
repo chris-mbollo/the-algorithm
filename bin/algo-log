@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+# algo-log — minimal run logger for the-algorithm
+# Usage:
+#   algo-log new <target-slug>       Create next-numbered run folder with stubs
+#   algo-log totals                  Recount runs/ and print a summary
+#
+# Run from the repo root (or symlink into your PATH).
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+RUNS_DIR="$REPO_ROOT/runs"
+
+cmd="${1:-help}"
+
+next_id() {
+  local last
+  last=$(ls "$RUNS_DIR" 2>/dev/null | grep -oE "^[0-9]{4}" | sort -n | tail -1 || echo "0000")
+  printf "%04d" $((10#$last + 1))
+}
+
+case "$cmd" in
+  new)
+    slug="${2:-}"
+    if [ -z "$slug" ]; then
+      echo "usage: algo-log new <target-slug>" >&2
+      exit 1
+    fi
+    id=$(next_id)
+    date=$(date +%Y-%m-%d)
+    folder="$RUNS_DIR/${id}-${slug}-${date}"
+    mkdir -p "$folder"
+
+    cat > "$folder/before.md" <<EOF
+# Before: <target>
+
+Snapshot of the thing audited — code, config, flow description, whatever it was *before* the audit ran. Paste raw.
+EOF
+
+    cat > "$folder/after.md" <<EOF
+# After: <target>
+
+Snapshot of the thing as it stands now. If the recommendations were only partly applied, say so.
+EOF
+
+    cat > "$folder/audit.md" <<EOF
+# Algorithm Audit: <target>
+
+**Date:** $date
+**Target:** <what was audited>
+**Headline metric:** <one number that proves it worked>
+
+## Step 1: Requirements Check
+## Step 2: Deletion Candidates
+## Step 3: Simplifications
+## Step 4: Acceleration
+## Step 5: Automation
+## Idiot Index
+## Utility Multiplier
+## Summary: Do This Now
+EOF
+
+    cat > "$folder/metrics.json" <<EOF
+{
+  "run_id": "$id",
+  "date": "$date",
+  "target": "<target>",
+  "target_type": "<config-file | ux-flow | codebase | workflow | architecture | decision>",
+  "category": "<context-engineering | product-design | infra | process>",
+  "metrics": {},
+  "headline": "<one sentence>",
+  "outcome": "<shipped | advisory | partial>",
+  "notes": ""
+}
+EOF
+
+    echo "Created $folder"
+    echo "Fill in the four files, then:"
+    echo "  git add runs/${id}-${slug}-${date}"
+    echo "  git commit -m \"Run $id: <target> — <headline>\""
+    echo "  git push"
+    ;;
+
+  totals)
+    runs=$(ls "$RUNS_DIR" 2>/dev/null | grep -cE "^[0-9]{4}-" || echo 0)
+    echo "Runs: $runs"
+    for f in "$RUNS_DIR"/*/metrics.json; do
+      [ -f "$f" ] || continue
+      id=$(basename "$(dirname "$f")")
+      headline=$(python3 -c "import json,sys; print(json.load(open('$f')).get('headline',''))")
+      echo "  $id — $headline"
+    done
+    ;;
+
+  help|*)
+    echo "Usage:"
+    echo "  algo-log new <target-slug>   Create next-numbered run folder with stubs"
+    echo "  algo-log totals              Print run count + headlines"
+    ;;
+esac

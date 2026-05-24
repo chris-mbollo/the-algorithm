@@ -1,0 +1,20 @@
+{
+  "run_id": "0001",
+  "date": "2026-05-09",
+  "target": "Owed M1 Onboarding (6-screen iOS flow)",
+  "target_type": "ux-flow",
+  "category": "product-design",
+  "metrics": {
+    "screens_before": 6,
+    "screens_after": 2,
+    "screens_cut": 4,
+    "pct_cut": 66.7,
+    "fields_deleted_from_onboarding": 5,
+    "fields_deleted_list": ["NPI", "ZIP", "CPT code", "session frequency", "group ID"],
+    "copy_rewrites": 12,
+    "estimated_trial_start_lift": "40%"
+  },
+  "headline": "Cut Owed onboarding from 6 screens to 2 before paywall; deferred 5 fields to just-in-time; rewrote 12 lines of copy to 3rd-grade level",
+  "outcome": "shipped",
+  "notes": "Audit driven by Yadegari's 3-seconds-to-value rule. Refactor applied same session."
+}

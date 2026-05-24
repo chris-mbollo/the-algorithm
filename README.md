@@ -24,20 +24,30 @@ Copy [`SKILL.md`](./SKILL.md) into `~/.claude/skills/the-algorithm/SKILL.md`. In
 
 ## Receipts
 
-Every time the skill runs, the before / after / audit / metrics get committed to [`runs/`](./runs). The git log is the run log.
+Every run gets a folder under [`runs/`](./runs) with `before.md`, `after.md`, `audit.md`, `metrics.json`. The git log is the run log.
 
 ### Totals
-- **Runs:** 1
-- **Lines cut:** 17
-- **Avg % reduction:** 30%
+- **Runs:** 2
+- **Shipped:** 2 / 2
+- **By target type:** 1 UX flow · 1 config file
+- **Highlights:** 67% fewer onboarding screens · 30% fewer lines in global CLAUDE.md
 
 ### Log
 
 | # | Date | Target | Type | Headline | Folder |
 |---|---|---|---|---|---|
-| 0001 | 2026-05-24 | `~/CLAUDE.md` | config-file | 56 → 39 lines (-30%) | [run](./runs/0001-claude-md-2026-05-24) |
+| 0001 | 2026-05-09 | Owed M1 onboarding | ux-flow | 6 → 2 screens before paywall (-67%) | [run](./runs/0001-owed-m1-onboarding-2026-05-09) |
+| 0002 | 2026-05-24 | `~/CLAUDE.md` | config-file | 56 → 39 lines (-30%) | [run](./runs/0002-claude-md-2026-05-24) |
 
 ---
+
+## Adding a run
+
+```bash
+./bin/algo-log new <target-slug>
+```
+
+Creates the next-numbered folder under `runs/` with stub files. Fill in `before.md` / `after.md` / `audit.md` / `metrics.json`, then commit.
 
 ## Why this repo exists
 

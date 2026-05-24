@@ -1,0 +1,20 @@
+{
+  "run_id": "0001",
+  "date": "2026-05-24",
+  "target": "/Users/macbookpro/CLAUDE.md",
+  "target_type": "config-file",
+  "category": "context-engineering",
+  "metrics": {
+    "lines_before": 56,
+    "lines_after": 39,
+    "lines_cut": 17,
+    "pct_cut": 30.4,
+    "sections_before": 7,
+    "sections_after": 7,
+    "lab_notes_before": 8,
+    "lab_notes_after": 3,
+    "templates_extracted": 1
+  },
+  "headline": "Cut 30% of global Claude Code instructions; killed 5 of 8 Lab Notes either duplicated by system prompt or by Profile section",
+  "notes": "Auto-research block extracted to ~/.claude/templates/auto-research.md so it stops bloating every conversation load."
+}
